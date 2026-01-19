@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>我的清单</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="header">
+      <h1>✅ 清单生成器</h1>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+      <!-- 左侧分类筛选 -->
+      <!-- <div class="category-sidebar">
+      </div> -->
+
+      <!-- 中间清单 -->
+      <div class="list-container">
+        <div class="category-suggestions" id="categorySuggestions">
+          <span>💡 建议分类：</span>
+          <span id="suggestedCategory"></span>
+          <button onclick="applySuggestedCategory()">使用</button>
+          <span class="hint">按 Tab 直接添加</span>
+        </div>
+        <div class="input-container">
+          <input type="text" id="newItem" placeholder="输入新事项..." />
+          <button onclick="addItem()">添加</button>
+        </div>
+        
+        <!-- 分类按钮 -->
+        <div class="category-filters" id="categoryFilters">
+          <button onclick="filterByCategory('all')" class="filter-btn active" id="filterAll">全部</button>
+          <button onclick="filterByCategory('uncategorized')" class="filter-btn" id="filterUncategorized">未分类</button>
+          <div id="categoryFilterButtons"></div>
+        </div>
+
+        <ul id="list"></ul>
+      </div>
+
+      <!-- 右侧统计 -->
+      <div class="stats-sidebar">
+        <!-- 饼状图 -->
+        <div class="stats-section">
+          <canvas id="progressChart" width="140" height="140"></canvas>
+          <div>
+            <div id="completionRate" class="completion-rate">0%</div>
+            <div class="completion-label">完成率</div>
+          </div>
+        </div>
+        
+        <!-- 脉冲动画 -->
+        <!-- <div class="animation-section">
+          <div class="pulse-container">
+            <div class="pulse" style="animation-delay: 0s;"></div>
+            <div class="pulse" style="animation-delay: 0.1s;"></div>
+            <div class="pulse" style="animation-delay: 0.3s;"></div>
+            <div class="pulse" style="animation-delay: 0.5s;"></div>
+            <div class="pulse" style="animation-delay: 0.7s;"></div>
+            <div class="pulse" style="animation-delay: 0.9s;"></div>
+          </div>
+        </div> -->
+        
+        <!-- 波浪动画 -->
+        <div class="animation-section">
+          <div class="wave-container">
+            <div class="wave" style="animation-delay: 0.0s;"></div>
+            <div class="wave" style="animation-delay: 0.15s;"></div>
+            <div class="wave" style="animation-delay: 0.3s;"></div>
+            <div class="wave" style="animation-delay: 0.45s;"></div>
+            <div class="wave" style="animation-delay: 0.6s;"></div>
+            <div class="wave" style="animation-delay: 0.75s;"></div>
+            <div class="wave" style="animation-delay: 0.9s;"></div>
+            <div class="wave" style="animation-delay: 1.05s;"></div>
+            <div class="wave" style="animation-delay: 1.2s;"></div>
+            <div class="wave" style="animation-delay: 1.35s;"></div>
+            <div class="wave" style="animation-delay: 1.5s;"></div>
+            <div class="wave" style="animation-delay: 1.65s;"></div>
+            <div class="wave" style="animation-delay: 1.8s;"></div>
+            <div class="wave" style="animation-delay: 1.95s;"></div>
+            <div class="wave" style="animation-delay: 2.1s;"></div>
+            <div class="wave" style="animation-delay: 2.25s;"></div>
+            <div class="wave" style="animation-delay: 2.4s;"></div>
+            <div class="wave" style="animation-delay: 2.55s;"></div>
+            <div class="wave" style="animation-delay: 2.7s;"></div>
+            <div class="wave" style="animation-delay: 2.85s;"></div>
+          </div>
+        </div>
+        
+        <!-- 旋转方块动画 -->
+        <!-- <div class="animation-section">
+          <div class="rotate-container">
+            <div class="rotate-box" style="animation-delay: 0s;"></div>
+            <div class="rotate-box" style="animation-delay: 0.3s;"></div>
+            <div class="rotate-box" style="animation-delay: 0.6s;"></div>
+          </div>
+        </div> -->
+        
+        <!-- 流动条动画 -->
+        <div class="animation-section">
+          <div class="flow-container">
+            <div class="flow-bar">
+              <div class="flow-bar-fill" style="animation-delay: 0s;"></div>
+            </div>
+            <div class="flow-bar">
+              <div class="flow-bar-fill" style="animation-delay: 0.5s;"></div>
+            </div>
+            <div class="flow-bar">
+              <div class="flow-bar-fill" style="animation-delay: 1s;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 时间显示 -->
+        <div class="time-section">
+          <div class="time-row">
+            <span class="digit" data-digit="h1">0</span>
+            <span class="digit" data-digit="h2">0</span>
+            <span class="separator">:</span>
+            <span class="digit" data-digit="m1">0</span>
+            <span class="digit" data-digit="m2">0</span>
+            <span class="separator">:</span>
+            <span class="digit" data-digit="s1">0</span>
+            <span class="digit" data-digit="s2">0</span>
+          </div>
+          <div id="msDisplay" class="ms-display">
+            <span class="digit" data-digit="ms1">0</span>
+            <span class="digit" data-digit="ms2">0</span>
+            <span class="digit" data-digit="ms3">0</span>
+            <span class="label">毫秒</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+       <button onclick="exportToMarkdown()" class="export-btn">导出为 Markdown</button>
+       <button onclick="document.getElementById('importFile').click()" class="import-btn">从 Markdown 导入</button>
+       <button onclick="clearAll()" class="clear-btn">清空所有</button>
+       <input type="file" id="importFile" accept=".md" onchange="importFromMarkdown(event)">
+     </div>
+  </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
